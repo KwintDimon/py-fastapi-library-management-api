@@ -10,7 +10,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Дозволити всі джерела
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -37,7 +37,7 @@ def get_all_authors(skip: int = 0, limit: int = 10, db: Session = Depends(get_db
 
 @app.get("/authors/{author_id}", response_model=schemas.Author)
 def get_author(author_id: int, db: Session = Depends(get_db_conn)):
-    author = crud.get_authors(db=db, author_id=author_id)
+    author = crud.get_author(db=db, author_id=author_id)
     if author is None:
         raise HTTPException(status_code=404, detail="Author not found")
     return author
@@ -53,7 +53,7 @@ def get_books(
         book_author_id: int,
         db: Session = Depends(get_db_conn)
 ):
-    return crud.get_books(db=db, author_id=book_author_id)
+    return crud.get_books_by_author(db=db, author_id=book_author_id)
 
 
 @app.post("/authors/", response_model=schemas.Author)

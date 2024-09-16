@@ -3,19 +3,23 @@ import models
 import schemas
 
 
-def get_authors(db: Session, author_id: int = None, skip: int = 0, limit: int = 10):
-    if author_id:
-        authors = db.query(models.DBAuthor).filter(models.DBAuthor.id == author_id).first()
-    else:
-        authors = db.query(models.DBAuthor).offset(skip).limit(limit).all()
+def get_author(db: Session, author_id: int):
+    author = db.query(models.DBAuthor).filter(models.DBAuthor.id == author_id).first()
+    return author
+
+
+def get_authors(db: Session, skip: int = 0, limit: int = 10):
+    authors = db.query(models.DBAuthor).offset(skip).limit(limit).all()
     return authors
 
 
-def get_books(db: Session, author_id: int = None, skip: int = 0, limit: int = 10):
-    if author_id:
-        books = db.query(models.DBBook).filter(models.DBBook.author_id == author_id).offset(skip).limit(limit).all()
-    else:
-        books = db.query(models.DBBook).offset(skip).limit(limit).all()
+def get_books_by_author(db: Session, author_id: int, skip: int = 0, limit: int = 10):
+    books = db.query(models.DBBook).filter(models.DBBook.author_id == author_id).offset(skip).limit(limit).all()
+    return books
+
+
+def get_books(db: Session, skip: int = 0, limit: int = 10):
+    books = db.query(models.DBBook).offset(skip).limit(limit).all()
     return books
 
 
